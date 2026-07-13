@@ -115,14 +115,14 @@ class ContactsTest extends TestCase
         $api = $this->getApiMock();
         $api->expects($this->once())
             ->method('get')
-            ->with('contacts/5')
+            ->with('contacts/testmail_123%40g4it.cz')
             ->will($this->returnValue(
                 new Response(200, [], $expectedArray))
             )
         ;
 
         /** @var Contacts $api */
-        $response = $api->getSingle(5);
+        $response = $api->getSingle('testmail_123@g4it.cz');
         $expectedObject = json_decode($expectedArray);
         $data = (array)$expectedObject->data;
         $this->assertEquals(
