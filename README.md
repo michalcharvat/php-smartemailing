@@ -67,6 +67,15 @@
 </details>
 
 <!-- GETTING STARTED -->
+## About this fork
+
+This is a maintained fork of [keltuo/php-smartemailing](https://github.com/keltuo/php-smartemailing) (unmaintained since 12/2021), updated against the current SmartEmailing API v3 spec. Changes on top of upstream v1.0.1:
+
+- Dropped the `symfony/string` dependency (replaced with native PHP string functions).
+- `Contacts::getSingle()` now addresses the contact by **e-mail address** (`GET /contacts/{emailaddress}`) per the current API — the by-id variant no longer exists in the API.
+- New endpoints: `Account::getInfo()` (`GET /account-info`), `Contacts::confirmDoubleOptIn()` (`POST /double-opt-in-confirmation`), `Contacts::getInLists()` (`GET /contacts/in-lists`), `Newsletter::getList()` (`GET /newsletter`).
+- PHPStan (level max) fixes.
+
 ## Getting Started
 
 Before using this library, you must have a valid API Key.
@@ -75,16 +84,18 @@ To get an API Key, please log in to your SmartEmailing account.
 ### Installation
 This library requires PHP 8 and higher.
 
-The recommended way to install the SmartEmailing PHP Library is through composer.
+Install through composer as a VCS repository:
+
+```json
+{
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/michalcharvat/php-smartemailing" }
+    ]
+}
+```
 
 ```
-# Install Composer
-curl -sS https://getcomposer.org/installer | php
-```
-
-
-```
-composer require keltuo/php-smartemailing
+composer require michalcharvat/php-smartemailing
 ```
 
 After installing, you need to require Composer's autoloader:
@@ -159,11 +170,15 @@ https://app.smartemailing.cz/docs/api/v3/index.html
     - Get single Customfield
 - Automation <a href="https://github.com/keltuo/php-smartemailing/blob/main/examples/Automation.php" target="_blank">Code Examples</a> | <a href="https://app.smartemailing.cz/docs/api/v3/index.html#api-Automation" target="_blank">doc api</a>
     - Trigger event
+- Account
+    - Get account info
 - Contacts <a href="https://github.com/keltuo/php-smartemailing/blob/main/examples/Contacts/" target="_blank">Code Examples</a> | <a href="https://app.smartemailing.cz/docs/api/v3/index.html#api-Contacts" target="_blank">doc api</a>
     - Change e-mail address of single contact
+    - Confirm double opt-in request
     - Forget contact
     - Get Contacts
-    - Get single Contact
+    - Get Contacts in lists (filtered by list membership)
+    - Get single Contact (by e-mail address)
 - Contacts in lists <a href="https://github.com/keltuo/php-smartemailing/blob/main/examples/Contacts-in-lists/" target="_blank">Code Examples</a> | <a href="https://app.smartemailing.cz/docs/api/v3/index.html#api-Contacts_in_lists" target="_blank">doc api</a>
     - Get all Contacts in list
     - Get confirmed Contacts in list
@@ -202,6 +217,7 @@ https://app.smartemailing.cz/docs/api/v3/index.html
     - Import contacts
 - Newsletter <a href="https://github.com/keltuo/php-smartemailing/blob/main/examples/Newsletter/" target="_blank">Code Examples</a> | <a href="https://app.smartemailing.cz/docs/api/v3/index.html#api-Newsletter" target="_blank">doc api</a>
     - Create newsletter
+    - Get newsletters
 - Processing purposes <a href="https://github.com/keltuo/php-smartemailing/blob/main/examples/Processing-purposes/" target="_blank">Code Examples</a> | <a href="https://app.smartemailing.cz/docs/api/v3/index.html#api-Processing_purposes" target="_blank">doc api</a>
     - Create new Processing purpose
     - Get Processing purpose connections

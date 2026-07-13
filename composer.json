@@ -1,7 +1,7 @@
 {
-    "name": "keltuo/php-smartemailing",
-    "description": "Smart Emailing API v3 client for PHP",
-    "version": "1.0.1",
+    "name": "michalcharvat/php-smartemailing",
+    "description": "Smart Emailing API v3 client for PHP (maintained fork of keltuo/php-smartemailing)",
+    "version": "1.1.0",
     "type": "library",
     "license": "MIT",
     "keywords": ["smart emailing", "smart", "emailing", "api", "php", "client"],
@@ -9,6 +9,10 @@
         {
             "name": "Lukas Paiskr",
             "email": "lukas@pasysdev.cz"
+        },
+        {
+            "name": "Michal Charvat",
+            "email": "info@michalcharvat.cz"
         }
     ],
     "autoload": {

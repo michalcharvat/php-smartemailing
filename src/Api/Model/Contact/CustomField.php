@@ -58,7 +58,7 @@ class CustomField extends AbstractModel implements ModelInterface
 
     public function addOption(mixed $customFiledId): CustomField
     {
-        $this->options[] = \intval($customFiledId);
+        $this->options[] = \is_scalar($customFiledId) ? (int)$customFiledId : 0;
         return $this;
     }
 

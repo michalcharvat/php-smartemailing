@@ -40,6 +40,9 @@ class CustomCampaigns extends AbstractApi
         return $this->send('send/transactional-emails-bulk', $transactionalEmail, 5);
     }
 
+    /**
+     * @param positive-int $chunkLimit
+     */
     protected function send(string $uri, AbstractModel $model, int $chunkLimit): ?Response
     {
         /**

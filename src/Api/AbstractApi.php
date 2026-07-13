@@ -22,6 +22,7 @@ abstract class AbstractApi
 
     protected const URI_PREFIX = '/api/v3/';
 
+    /** @var positive-int */
     protected int $chunkLimit = 500;
 
     private Client $client;

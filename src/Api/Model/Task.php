@@ -5,7 +5,6 @@ namespace SmartEmailing\Api\Model;
 
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
-use SmartEmailing\Api\Model\Bag\AbstractBag;
 use SmartEmailing\Api\Model\Bag\AttachmentBag;
 use SmartEmailing\Api\Model\Bag\ReplaceBag;
 
@@ -113,13 +112,7 @@ class Task extends AbstractModel implements ModelInterface
             'template_variables' => $this->getTemplateVariables(),
             'attachments' => $this->getAttachmentsBag(),
             ],
-            static fn ($item) => (
-                (!\is_array($item) && \is_a($item, AttachmentBag::class))
-                || (!\is_array($item) && \is_a($item, ReplaceBag::class))
-                || (!\is_array($item) && \is_a($item, AbstractBag::class) && !$item->isEmpty())
-                || (!\is_array($item) && \is_a($item, Recipient::class))
-                || (\is_array($item) && \count($item)>0)
-            )
+            static fn ($item) => !\is_array($item) || \count($item) > 0
         );
     }
 }

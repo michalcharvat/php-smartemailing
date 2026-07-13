@@ -42,7 +42,7 @@ class Purpose extends AbstractModel implements ModelInterface
 
     public function setId(mixed $id): Purpose
     {
-        $this->id = \intval($id);
+        $this->id = \is_scalar($id) ? (int)$id : 0;
         return $this;
     }
 
