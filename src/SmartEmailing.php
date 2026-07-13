@@ -5,6 +5,7 @@ namespace SmartEmailing;
 
 use GuzzleHttp\Client;
 use JetBrains\PhpStorm\Pure;
+use SmartEmailing\Api\Account;
 use SmartEmailing\Api\Automation;
 use SmartEmailing\Api\ContactLists;
 use SmartEmailing\Api\Contacts;
@@ -47,6 +48,12 @@ class SmartEmailing
                 ],
             ]
         );
+    }
+
+    #[Pure]
+    public function account(): Account
+    {
+        return new Account($this);
     }
 
     #[Pure]
