@@ -59,6 +59,37 @@ class NewsletterTest extends TestCase
         $this->assertTrue($response->isSuccess());
     }
 
+    public function testShouldGetNewsletterList(): void
+    {
+        $expectedArray = '{
+            "status": "ok",
+            "meta": [],
+            "data": [
+                {"id": 10, "email_id": 1, "name": "My awesome newsletter"}
+            ]
+        }';
+
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('get')
+            ->with('newsletter', [
+                'filter[email_id][eq]' => 1,
+                'limit' => 500,
+                'offset' => 0,
+            ])
+            ->will($this->returnValue(
+                new Response(200, [], $expectedArray))
+            )
+        ;
+
+        /** @var \SmartEmailing\Api\Newsletter $api */
+        $response = $api->getList(null, 1);
+        $expectedObject = json_decode($expectedArray);
+        $this->assertEquals($expectedObject->data, $response->getData());
+        $this->assertEquals($expectedObject->status, $response->getStatus());
+        $this->assertTrue($response->isSuccess());
+    }
+
     protected function getApiClass(): string
     {
         return \SmartEmailing\Api\Newsletter::class;
