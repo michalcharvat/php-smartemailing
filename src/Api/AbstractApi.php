@@ -77,18 +77,38 @@ abstract class AbstractApi
                 $options
             );
         } catch (GuzzleException $exception) {
-            /** @var \GuzzleHttp\Exception\RequestException $exception */
-            $response = new BaseResponse($exception->getResponse());
-            $message = $exception->getMessage();
+            // Only Guzzle's RequestException carries an HTTP response; network-level
+            // failures (ConnectException, ...) have none — guard, don't assume.
+            $httpResponse = $exception instanceof \GuzzleHttp\Exception\RequestException
+                ? $exception->getResponse()
+                : null;
+            $request = \method_exists($exception, 'getRequest') ? $exception->getRequest() : null;
 
-            if ($message === 'Client error' && \is_string($response->getMessage())) {
-                $message = "Client error: {$response->getMessage()}";
+            try {
+                $response = new BaseResponse($httpResponse);
+            } catch (RequestException $apiException) {
+                // BaseResponse throws for error/absent responses; re-throw with the
+                // transport exception chained and a meaningful message for the
+                // no-API-message case (e.g. "Connection refused").
+                $message = $apiException->getResponse()->getMessage() !== ''
+                    ? $apiException->getMessage()
+                    : $exception->getMessage();
+
+                throw new RequestException(
+                    $apiException->getResponse(),
+                    $request,
+                    $message,
+                    \intval($exception->getCode()),
+                    $exception
+                );
             }
 
+            // Defensive: only reachable if the transport failed while the response
+            // parsed as successful (should not happen) — preserve legacy behavior.
             throw new RequestException(
                 $response,
-                $exception->getRequest(),
-                $message,
+                $request,
+                $exception->getMessage(),
                 \intval($exception->getCode()),
                 $exception
             );
