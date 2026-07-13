@@ -6,7 +6,6 @@ namespace SmartEmailing\Api\Model;
 use JsonSerializable;
 use ReflectionClass;
 use Stringable;
-use function Symfony\Component\String\u;
 
 abstract class AbstractModel implements JsonSerializable, Stringable
 {
@@ -21,7 +20,7 @@ abstract class AbstractModel implements JsonSerializable, Stringable
                 continue;
             }
 
-            $mapProperty = (string)u('set ' . $param)->camel();
+            $mapProperty = 'set' . \str_replace(' ', '', \ucwords(\str_replace(['_', '-'], ' ', $param)));
 
             if ($ref->hasMethod($mapProperty)) {
                 $this->{$mapProperty}($value);

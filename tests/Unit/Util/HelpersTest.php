@@ -27,6 +27,22 @@ class HelpersTest extends TestCase
         $this->assertTrue(Helpers::validateEmail($email));
     }
 
+    public function testReplaceUrlParameters()
+    {
+        $this->assertEquals(
+            'contacts/forget/15',
+            Helpers::replaceUrlParameters('contacts/forget/:id', ['id' => 15])
+        );
+        $this->assertEquals(
+            'contactlists/7/contacts',
+            Helpers::replaceUrlParameters('contactlists/:id/contacts', ['Id' => 7])
+        );
+        $this->assertEquals(
+            'web-form-structure/3/type/full',
+            Helpers::replaceUrlParameters('web-form-structure/:id/type/:formtype', ['id' => 3, 'formType' => 'full'])
+        );
+    }
+
     public function testNonValidEmail()
     {
         $this->expectException(InvalidArgumentException::class);

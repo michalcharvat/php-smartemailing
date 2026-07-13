@@ -7,7 +7,6 @@ use JetBrains\PhpStorm\ArrayShape;
 use JsonSerializable;
 use SmartEmailing\Exception\AllowedTypeException;
 use Stringable;
-use function Symfony\Component\String\u;
 
 abstract class AbstractSearch implements JsonSerializable, Stringable
 {
@@ -219,7 +218,7 @@ abstract class AbstractSearch implements JsonSerializable, Stringable
 
     protected function checkAddKey(string $key, string $type, array $listKeys): bool
     {
-        $key = u($key)->lower()->toString();
+        $key = \strtolower($key);
         AllowedTypeException::check($key, $this->getAllowedProperties($type));
         return match ($type) {
             self::TYPE_FILTER => !\array_key_exists($key, $listKeys),
