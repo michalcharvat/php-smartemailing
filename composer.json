@@ -1,10 +1,16 @@
 {
     "name": "michalcharvat/php-smartemailing",
     "description": "Smart Emailing API v3 client for PHP (maintained fork of keltuo/php-smartemailing)",
-    "version": "1.1.0",
     "type": "library",
     "license": "MIT",
-    "keywords": ["smart emailing", "smart", "emailing", "api", "php", "client"],
+    "keywords": [
+        "smart emailing",
+        "smart",
+        "emailing",
+        "api",
+        "php",
+        "client"
+    ],
     "authors": [
         {
             "name": "Lukas Paiskr",
@@ -21,9 +27,9 @@
         }
     },
     "autoload-dev": {
-      "psr-4": {
-        "SmartEmailing\\Test\\": "tests/"
-      }
+        "psr-4": {
+            "SmartEmailing\\Test\\": "tests/"
+        }
     },
     "minimum-stability": "stable",
     "require": {
