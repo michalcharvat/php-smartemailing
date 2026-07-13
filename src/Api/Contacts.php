@@ -7,6 +7,7 @@ use SmartEmailing\Api\Model\ChangeEmailAddress;
 use SmartEmailing\Api\Model\Response\BaseResponse as Response;
 use SmartEmailing\Api\Model\Search\Contacts as SearchContact;
 use SmartEmailing\Api\Model\Search\SingleContact as SearchSingleContact;
+use SmartEmailing\Exception\AllowedTypeException;
 use SmartEmailing\Util\Helpers;
 
 /**
@@ -15,6 +16,54 @@ use SmartEmailing\Util\Helpers;
  */
 class Contacts extends AbstractApi
 {
+    public const IN_LISTS_STATUS_CONFIRMED = 'confirmed';
+    public const IN_LISTS_STATUS_UNSUBSCRIBED = 'unsubscribed';
+
+    /**
+     * Confirm a pending double-opt-in request.
+     *
+     * @param string $requestId DOI request ID to confirm
+     */
+    public function confirmDoubleOptIn(string $requestId): Response
+    {
+        return new Response($this->post('double-opt-in-confirmation', ['id' => $requestId]));
+    }
+
+    /**
+     * Get contacts filtered by contactlist membership.
+     *
+     * @param array $listIds contactlist IDs to filter by
+     * @param string|null $status one of the IN_LISTS_STATUS_* constants
+     */
+    public function getInLists(
+        array $listIds = [],
+        ?string $status = null,
+        int $limit = 500,
+        int $offset = 0
+    ): Response {
+        if ($status !== null) {
+            AllowedTypeException::check(
+                $status,
+                [self::IN_LISTS_STATUS_CONFIRMED, self::IN_LISTS_STATUS_UNSUBSCRIBED]
+            );
+        }
+
+        $query = [];
+
+        if (\count($listIds) > 0) {
+            $query['listIds'] = \implode(',', $listIds);
+        }
+
+        if ($status !== null) {
+            $query['status'] = $status;
+        }
+
+        $query['limit'] = $limit;
+        $query['offset'] = $offset;
+
+        return new Response($this->get('contacts/in-lists', $query));
+    }
+
     /**
      * @see https://app.smartemailing.cz/docs/api/v3/index.html#api-Contacts-Change_Contacts_e_mail_address
      */

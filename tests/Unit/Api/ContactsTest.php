@@ -140,6 +140,61 @@ class ContactsTest extends TestCase
         $this->assertTrue($response->isSuccess());
     }
 
+    public function testShouldConfirmDoubleOptIn(): void
+    {
+        $expectedArray = '{
+            "status": "ok",
+            "meta": []
+        }';
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('post')
+            ->with('double-opt-in-confirmation', ['id' => '11ef008c617c561ca0941258b40d1d73'])
+            ->will($this->returnValue(
+                new Response(200, [], $expectedArray))
+            )
+        ;
+
+        /** @var Contacts $api */
+        $response = $api->confirmDoubleOptIn('11ef008c617c561ca0941258b40d1d73');
+        $this->assertEquals('ok', $response->getStatus());
+        $this->assertTrue($response->isSuccess());
+    }
+
+    public function testShouldGetContactsInLists(): void
+    {
+        $expectedArray = $this->getExpectedData();
+
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('get')
+            ->with('contacts/in-lists', [
+                'listIds' => '1,2,3',
+                'status' => 'confirmed',
+                'limit' => 500,
+                'offset' => 0,
+            ])
+            ->will($this->returnValue(
+                new Response(200, [], $expectedArray))
+            )
+        ;
+
+        /** @var Contacts $api */
+        $response = $api->getInLists([1, 2, 3], 'confirmed');
+        $expectedObject = json_decode($expectedArray);
+        $this->assertEquals($expectedObject->data, $response->getData());
+        $this->assertTrue($response->isSuccess());
+    }
+
+    public function testShouldRejectInvalidStatusForGetContactsInLists(): void
+    {
+        $api = $this->getApiMock();
+
+        $this->expectException(\SmartEmailing\Exception\AllowedTypeException::class);
+        /** @var Contacts $api */
+        $api->getInLists([1], 'blacklisted');
+    }
+
     protected function getExpectedSingleData(): string
     {
         return '
