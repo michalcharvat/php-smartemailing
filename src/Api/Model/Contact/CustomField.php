@@ -92,13 +92,17 @@ class CustomField extends AbstractModel implements ModelInterface
     )]
     public function toArray(): array
     {
-        return \array_filter(
-            [
-            'id' => $this->getId(),
-            'options' => $this->getOptions(),
-            'value' => $this->getValue(),
-            ],
-            static fn ($item) => !empty($item)
-        );
+        $data = ['id' => $this->getId()];
+
+        if (\count($this->getOptions()) > 0) {
+            $data['options'] = $this->getOptions();
+        }
+
+        // Keep "0" — empty() would drop legitimate falsy values (e.g. bool custom-field "0").
+        if ($this->getValue() !== '') {
+            $data['value'] = $this->getValue();
+        }
+
+        return $data;
     }
 }
