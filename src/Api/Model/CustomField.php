@@ -15,6 +15,8 @@ class CustomField extends AbstractModel
     public const CHECKBOX = "checkbox";
     public const RADIO = "radio";
     public const SELECT = "select";
+    public const BOOL = 'bool';
+    public const NUMERIC = 'numeric';
 
     /**
      * Customfield name
@@ -66,6 +68,8 @@ class CustomField extends AbstractModel
             self::CHECKBOX,
             self::RADIO,
             self::SELECT,
+            self::BOOL,
+            self::NUMERIC,
         ];
     }
 

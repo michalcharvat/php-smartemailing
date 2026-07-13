@@ -75,6 +75,7 @@ This is a maintained fork of [keltuo/php-smartemailing](https://github.com/keltu
 - `Contacts::getSingle()` now addresses the contact by **e-mail address** (`GET /contacts/{emailaddress}`) per the current API — the by-id variant no longer exists in the API.
 - New endpoints: `Account::getInfo()` (`GET /account-info`), `Contacts::confirmDoubleOptIn()` (`POST /double-opt-in-confirmation`), `Contacts::getInLists()` (`GET /contacts/in-lists`), `Newsletter::getList()` (`GET /newsletter`).
 - PHPStan (level max) fixes.
+- v1.2.0: `Webhook::setBasicAuth()` (current API `basic_auth` callback credentials), `CustomField` types `bool` + `numeric`, configurable Guzzle `timeout` (default 30 s) on the `SmartEmailing` constructor.
 
 ## Getting Started
 

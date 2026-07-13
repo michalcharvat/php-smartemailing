@@ -29,10 +29,24 @@ class Webhook extends AbstractModel
      */
     protected string $event;
 
+    /**
+     * Optional HTTP Basic Auth credentials SmartEmailing sends with every webhook callback.
+     */
+    protected ?string $basicAuthLogin = null;
+
+    protected ?string $basicAuthPassword = null;
+
     public function __construct(string $targetUrl, string $event)
     {
         $this->setTargetUrl($targetUrl);
         $this->setEvent($event);
+    }
+
+    public function setBasicAuth(string $login, string $password): Webhook
+    {
+        $this->basicAuthLogin = $login;
+        $this->basicAuthPassword = $password;
+        return $this;
     }
 
     public function getTargetUrl(): string
@@ -74,13 +88,23 @@ class Webhook extends AbstractModel
         [
         'target_url' => "string",
         'event' => "string",
+        'basic_auth' => "array|null",
         ]
     )]
     public function toArray(): array
     {
-        return [
+        $data = [
             'target_url' => $this->getTargetUrl(),
             'event' => $this->getEvent(),
         ];
+
+        if ($this->basicAuthLogin !== null && $this->basicAuthPassword !== null) {
+            $data['basic_auth'] = [
+                'login' => $this->basicAuthLogin,
+                'password' => $this->basicAuthPassword,
+            ];
+        }
+
+        return $data;
     }
 }

@@ -36,12 +36,13 @@ class SmartEmailing
 
     protected static SmartEmailing $instance;
 
-    public function __construct(string $username, string $apiKey, ?string $baseUrl = null)
+    public function __construct(string $username, string $apiKey, ?string $baseUrl = null, float $timeout = 30.0)
     {
         $this->client = new Client(
             [
                 'auth' => [$username, $apiKey],
                 'base_uri' => $baseUrl ?? $this->baseUrl,
+                'timeout' => $timeout,
                 'headers' => [
                     'Accept' => self::DOCUMENT_TYPE,
                     'User-Agent' => self::USER_AGENT,
